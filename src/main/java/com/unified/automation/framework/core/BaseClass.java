@@ -13,7 +13,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public class BaseClass {
-	//Setting up class
 
 	protected Properties prop;
 	protected WebDriver driver;
