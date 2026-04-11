@@ -25,7 +25,7 @@ public class BaseClass {
 
 		// Initialize the WebDriver based on browser defined in config.properties file
 		String browser = prop.getProperty("browser");
-
+test
 		if (browser.equalsIgnoreCase("chrome")) {
 			driver = new ChromeDriver();
 		} else if (browser.equalsIgnoreCase("edge")) {
