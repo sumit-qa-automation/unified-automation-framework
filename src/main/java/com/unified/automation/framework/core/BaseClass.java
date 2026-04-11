@@ -19,7 +19,8 @@ public class BaseClass {
 
 	protected static Properties prop;
 	protected static WebDriver driver;
-    @BeforeSuite
+
+	@BeforeSuite
 	public void initializeConfiguration() throws IOException {
 		// Load the configuration file by giving path of file
 		prop = new Properties();
@@ -33,7 +34,7 @@ public class BaseClass {
 		System.out.println("Setting up WebDriver for:" + this.getClass().getSimpleName());
 		launchBrowser();
 		configureBrowser();
-        staticWait(7);
+		staticWait(7);
 
 	}
 
@@ -81,11 +82,21 @@ public class BaseClass {
 				System.out.println("Unable to quit driver:" + e.getMessage());
 			}
 		}
-		
+
 	}
-	//Static wait for pause
-	public void staticWait(int seconds)
-	{
+
+	// Getter method for Driver
+	public WebDriver getDriver() {
+		return driver;
+	}
+
+	// Setter method for Driver
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	// Static wait for pause
+	public void staticWait(int seconds) {
 		LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(seconds));
 	}
 
