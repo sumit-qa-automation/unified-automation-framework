@@ -13,6 +13,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public class BaseClass {
+	//Setting up class
 
 	protected Properties prop;
 	protected WebDriver driver;
@@ -22,6 +23,7 @@ public class BaseClass {
 		prop = new Properties();
 		FileInputStream file = new FileInputStream("src/main/resources/config.properties");
 		prop.load(file);
+		
 
 		// Initialize the WebDriver based on browser defined in config.properties file
 		String browser = prop.getProperty("browser");
