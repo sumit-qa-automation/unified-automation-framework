@@ -73,7 +73,7 @@ public class ActionDriver {
 	}
 
 	// Method to compare two text
-	public void compareText(By by, String expectedText) {
+	public boolean compareText(By by, String expectedText) {
 		try {
 			waitForElementToBeVisible(by);
 			String actualText = driver.findElement(by).getText();
@@ -87,6 +87,7 @@ public class ActionDriver {
 			System.out.println("Unable to compare text:" + e.getMessage());
 
 		}
+		return false;
 	}
 
 	// Method to check if element is displayed
