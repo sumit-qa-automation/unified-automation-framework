@@ -9,13 +9,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.unified.automation.framework.core.BaseClass;
+
 public class ActionDriver {
 	private WebDriver driver;
 	private WebDriverWait wait;
 
 	public ActionDriver(WebDriver driver) {
 		this.driver = driver;
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		int explicitWait=Integer.parseInt(BaseClass.getProp().getProperty("explicitWait"));
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(explicitWait));
 	}
 
 	// Wait for element to be clickable
@@ -50,8 +53,9 @@ public class ActionDriver {
 	public void enterText(By by, String value) {
 		try {
 			waitForElementToBeVisible(by);
-			driver.findElement(by).clear();
-			driver.findElement(by).sendKeys(value);
+			WebElement element = driver.findElement(by);
+			element.clear();
+			element.sendKeys(value);
 		} catch (Exception e) {
 			System.out.println("Unable to enter value in input box:" + e.getMessage());
 		}
@@ -89,14 +93,7 @@ public class ActionDriver {
 	public boolean isDisplayed(By by) {
 		try {
 			waitForElementToBeVisible(by);
-			boolean isDisplayed = driver.findElement(by).isDisplayed();
-			if (isDisplayed) {
-				System.out.println("Element is displayed:");
-				return isDisplayed;
-			} else {
-				System.out.println("Element is not displaed");
-				return isDisplayed;
-			}
+			return driver.findElement(by).isDisplayed();
 
 		} catch (Exception e) {
 			System.out.println("Element is not displaed:" + e.getMessage());
