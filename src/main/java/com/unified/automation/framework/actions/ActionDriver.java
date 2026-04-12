@@ -79,8 +79,10 @@ public class ActionDriver {
 			String actualText = driver.findElement(by).getText();
 			if (expectedText.equals(actualText)) {
 				System.out.println("Text are matching:" + actualText + "equals" + expectedText);
+				return true;
 			} else {
 				System.out.println("Text are not matching:" + actualText + "not equals" + expectedText);
+				return false;
 			}
 
 		} catch (Exception e) {

@@ -15,10 +15,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.unified.automation.framework.actions.ActionDriver;
+
 public class BaseClass {
 
 	protected static Properties prop;
 	protected static WebDriver driver;
+	private static ActionDriver actionDriver;
 
 	@BeforeSuite
 	public void initializeConfiguration() throws IOException {
@@ -35,6 +38,12 @@ public class BaseClass {
 		launchBrowser();
 		configureBrowser();
 		staticWait(7);
+
+		// Initialize the ActionDriver only once
+		if (actionDriver == null) {
+			actionDriver = new ActionDriver(driver);
+			System.out.println("ActionDriver instance is created");
+		}
 
 	}
 
@@ -82,16 +91,28 @@ public class BaseClass {
 				System.out.println("Unable to quit driver:" + e.getMessage());
 			}
 		}
+		System.out.println("WebDriver Instance is closed.");
+		driver = null;
+		actionDriver = null;
 
 	}
-	// Getter method for Prop
-		public static Properties getProp() {
-			return prop;
-		}
 
-	// Getter method for Driver
-	public WebDriver getDriver() {
+	// Getter method for WebDriver
+	public static WebDriver getDriver() {
+		if (driver == null) {
+			System.out.println("WebDriver is not initiated");
+			throw new IllegalStateException("WebDriver is not initiated");
+		}
 		return driver;
+	}
+
+	// Getter method for WebDriver
+	public static ActionDriver getActionDriver() {
+		if (actionDriver == null) {
+			System.out.println("ActionDriver is not initiated");
+			throw new IllegalStateException("ActionDriver is not initiated");
+		}
+		return actionDriver;
 	}
 
 	// Setter method for Driver
@@ -102,6 +123,11 @@ public class BaseClass {
 	// Static wait for pause
 	public void staticWait(int seconds) {
 		LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(seconds));
+	}
+
+	// Getter method for prop
+	public static Properties getProp() {
+		return prop;
 	}
 
 }

@@ -18,13 +18,9 @@ public class LoginPage {
 		private By errorMessage = By.xpath("//p[text()='Invalid credentials']");
 		
 		//Initialize the ActionDriver object by passing WebDriver instance
-		public LoginPage(WebDriver driver) {
-			 this.actionDriver= new ActionDriver(driver);
-		} 
-		
-	/*	public LoginPage(WebDriver driver) {
-			this.actionDriver = BaseClass.getDriver();
-		}*/
+			public LoginPage(WebDriver driver) {
+			this.actionDriver = BaseClass.getActionDriver();
+		}
 		
 		//Method to perform login
 		public void login(String userName, String password) {

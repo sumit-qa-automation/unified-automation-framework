@@ -24,15 +24,9 @@ public class HomePage {
 	private By emplLastName = By.xpath("//div[@class='oxd-table-card']/div/div[4]");
 
 	// Initialize the ActionDriver object by passing WebDriver instance
-
 	public HomePage(WebDriver driver) {
-		this.actionDriver = new ActionDriver(driver);
+		this.actionDriver = BaseClass.getActionDriver();
 	}
-
-	/*
-	 * public HomePage(WebDriver driver) { this.actionDriver =
-	 * BaseClass.getActionDriver(); }
-	 */
 
 	// Method to verify if Admin tab is visible
 	public boolean isAdminTabVisible() {

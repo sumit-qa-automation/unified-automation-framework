@@ -8,7 +8,7 @@ import com.unified.automation.framework.core.BaseClass;
 import com.unified.automation.framework.pages.HomePage;
 import com.unified.automation.framework.pages.LoginPage;
 
-public class LoginPageTest extends BaseClass {
+public class HomePageTest extends BaseClass {
 	private LoginPage loginPage;
 	private HomePage homePage;
 
@@ -17,18 +17,12 @@ public class LoginPageTest extends BaseClass {
 		loginPage = new LoginPage(getDriver());
 		homePage = new HomePage(getDriver());
 	}
-    @Test
-	public void verifyValidLoginTest() {
+
+	@Test
+	public void verifyHomePageDashboardLogo() {
 		loginPage.login("admin", "admin123");
-		Assert.assertTrue(homePage.isAdminTabVisible(),"Admin tab should be visible after login");
-	    homePage.logout();
-	}
-    @Test
-	public void verifyInValidLoginTest() {
-		loginPage.login("admin", "admin1");
-		String expectedErrorMessage="Invalid credentials";
-		Assert.assertTrue(loginPage.verifyErrorMessage(expectedErrorMessage),"Test Failed:Invalid error message");
-	    homePage.logout();
+		Assert.assertTrue(homePage.verifyOrangeHRMlogo(), "Logo is not visible");
+		homePage.logout();
 	}
 
 }
