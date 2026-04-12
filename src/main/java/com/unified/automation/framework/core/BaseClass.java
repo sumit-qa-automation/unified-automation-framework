@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -16,12 +17,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import com.unified.automation.framework.actions.ActionDriver;
+import com.unified.automation.framework.utilities.LoggerManager;
 
 public class BaseClass {
 
 	protected static Properties prop;
 	protected static WebDriver driver;
 	private static ActionDriver actionDriver;
+	public static final Logger logger = LoggerManager.getLogger(BaseClass.class);
 
 	@BeforeSuite
 	public void initializeConfiguration() throws IOException {
@@ -29,6 +32,7 @@ public class BaseClass {
 		prop = new Properties();
 		FileInputStream file = new FileInputStream("src/main/resources/config.properties");
 		prop.load(file);
+		logger.info("config.properties file is loaded");
 
 	}
 
@@ -37,12 +41,19 @@ public class BaseClass {
 		System.out.println("Setting up WebDriver for:" + this.getClass().getSimpleName());
 		launchBrowser();
 		configureBrowser();
-		staticWait(7);
+		staticWait(1);
+		// Sample logger message
+		logger.info("WebDriver Initialized and Browser Maximized");
+		logger.trace("This is a Trace message");
+		logger.error("This is a error message");
+		logger.debug("This is a debug message");
+		logger.fatal("This is a fatal message");
+		logger.warn("This is a warm message");
 
 		// Initialize the ActionDriver only once
 		if (actionDriver == null) {
 			actionDriver = new ActionDriver(driver);
-			System.out.println("ActionDriver instance is created");
+			logger.info("ActionDriver initlialized for thread: " + Thread.currentThread().getId());
 		}
 
 	}
@@ -53,10 +64,13 @@ public class BaseClass {
 
 		if (browser.equalsIgnoreCase("chrome")) {
 			driver = new ChromeDriver();
+			logger.info("ChromeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("edge")) {
 			driver = new EdgeDriver();
+			logger.info("EdgeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("firefox")) {
 			driver = new FirefoxDriver();
+			logger.info("FirefoxDriver Initialized");
 		} else {
 			throw new IllegalArgumentException("Browser not supported");
 		}
@@ -88,10 +102,10 @@ public class BaseClass {
 			try {
 				driver.quit();
 			} catch (Exception e) {
-				System.out.println("Unable to quit driver:" + e.getMessage());
+				logger.info("Unable to quit driver:" + e.getMessage());
 			}
 		}
-		System.out.println("WebDriver Instance is closed.");
+		logger.info("WebDriver Instance is closed.");
 		driver = null;
 		actionDriver = null;
 
@@ -100,7 +114,7 @@ public class BaseClass {
 	// Getter method for WebDriver
 	public static WebDriver getDriver() {
 		if (driver == null) {
-			System.out.println("WebDriver is not initiated");
+			logger.info("WebDriver is not initiated");
 			throw new IllegalStateException("WebDriver is not initiated");
 		}
 		return driver;
@@ -109,7 +123,7 @@ public class BaseClass {
 	// Getter method for WebDriver
 	public static ActionDriver getActionDriver() {
 		if (actionDriver == null) {
-			System.out.println("ActionDriver is not initiated");
+			logger.info("ActionDriver is not initiated");
 			throw new IllegalStateException("ActionDriver is not initiated");
 		}
 		return actionDriver;
