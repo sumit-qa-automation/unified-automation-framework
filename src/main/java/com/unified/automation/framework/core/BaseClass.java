@@ -22,8 +22,10 @@ import com.unified.automation.framework.utilities.LoggerManager;
 public class BaseClass {
 
 	protected static Properties prop;
-	protected static WebDriver driver;
-	private static ActionDriver actionDriver;
+	// protected static WebDriver driver;
+	// private static ActionDriver actionDriver;
+	private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+	private static ThreadLocal<ActionDriver> actionDriver = new ThreadLocal<>();
 	public static final Logger logger = LoggerManager.getLogger(BaseClass.class);
 
 	@BeforeSuite
@@ -37,7 +39,7 @@ public class BaseClass {
 	}
 
 	@BeforeMethod
-	public void setup() throws IOException {
+	public synchronized void setup() throws IOException {
 		System.out.println("Setting up WebDriver for:" + this.getClass().getSimpleName());
 		launchBrowser();
 		configureBrowser();
@@ -50,26 +52,36 @@ public class BaseClass {
 		logger.fatal("This is a fatal message");
 		logger.warn("This is a warm message");
 
-		// Initialize the ActionDriver only once
-		if (actionDriver == null) {
-			actionDriver = new ActionDriver(driver);
-			logger.info("ActionDriver initlialized for thread: " + Thread.currentThread().getId());
-		}
+		/*
+		 * // Initialize the ActionDriver only once if (actionDriver == null) {
+		 * actionDriver = new ActionDriver(driver);
+		 * logger.info("ActionDriver initlialized for thread: " +
+		 * Thread.currentThread().getId()); }
+		 */
+		
+		// Initialize the ActionDriver for the current thread
+		actionDriver.set(new ActionDriver(getDriver()));
+		logger.info("ActionDriver initialized for thread:"+Thread.currentThread());
+		
+		
 
 	}
 
-	private void launchBrowser() {
+	private synchronized void launchBrowser() {
 		// Initialize the WebDriver based on browser defined in config.properties file
 		String browser = prop.getProperty("browser");
 
 		if (browser.equalsIgnoreCase("chrome")) {
-			driver = new ChromeDriver();
+			//driver = new ChromeDriver();
+			driver.set(new ChromeDriver());
 			logger.info("ChromeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("edge")) {
-			driver = new EdgeDriver();
+			//driver = new EdgeDriver();
+			driver.set(new EdgeDriver());
 			logger.info("EdgeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("firefox")) {
-			driver = new FirefoxDriver();
+			//driver = new FirefoxDriver();
+			driver.set(new FirefoxDriver());
 			logger.info("FirefoxDriver Initialized");
 		} else {
 			throw new IllegalArgumentException("Browser not supported");
@@ -82,14 +94,14 @@ public class BaseClass {
 	private void configureBrowser() {
 		// Implicit Wait, First convert String to int
 		int implicitWait = Integer.parseInt(prop.getProperty("implicitWait"));
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
+		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
 
 		// Maximize the browser
-		driver.manage().window().maximize();
+		getDriver().manage().window().maximize();
 
 		// Navigate to url
 		try {
-			driver.get(prop.getProperty("url_base"));
+			getDriver().get(prop.getProperty("url_base"));
 		} catch (Exception e) {
 			System.out.println("Failed to navigate to the UR:" + e.getMessage());
 		}
@@ -97,40 +109,42 @@ public class BaseClass {
 	}
 
 	@AfterMethod
-	public void tearDown() {
-		if (driver != null) {
+	public synchronized void tearDown() {
+		if (getDriver() != null) {
 			try {
-				driver.quit();
+				getDriver().quit();
 			} catch (Exception e) {
 				logger.info("Unable to quit driver:" + e.getMessage());
 			}
 		}
 		logger.info("WebDriver Instance is closed.");
-		driver = null;
-		actionDriver = null;
+        driver.remove();
+        actionDriver.remove();
+		//driver = null;
+       //actionDriver = null;
 
 	}
 
 	// Getter method for WebDriver
 	public static WebDriver getDriver() {
-		if (driver == null) {
+		if (driver.get() == null) {
 			logger.info("WebDriver is not initiated");
 			throw new IllegalStateException("WebDriver is not initiated");
 		}
-		return driver;
+		return driver.get();
 	}
 
 	// Getter method for WebDriver
 	public static ActionDriver getActionDriver() {
-		if (actionDriver == null) {
+		if (actionDriver.get() == null) {
 			logger.info("ActionDriver is not initiated");
 			throw new IllegalStateException("ActionDriver is not initiated");
 		}
-		return actionDriver;
+		return actionDriver.get();
 	}
 
 	// Setter method for Driver
-	public void setDriver(WebDriver driver) {
+	public void setDriver(ThreadLocal<WebDriver> driver) {
 		this.driver = driver;
 	}
 
