@@ -17,6 +17,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import com.unified.automation.framework.actions.ActionDriver;
+import com.unified.automation.framework.utilities.ExtentReportManager;
 import com.unified.automation.framework.utilities.LoggerManager;
 
 public class BaseClass {
@@ -35,7 +36,8 @@ public class BaseClass {
 		FileInputStream file = new FileInputStream("src/main/resources/config.properties");
 		prop.load(file);
 		logger.info("config.properties file is loaded");
-
+        
+		ExtentReportManager.getReporter();
 	}
 
 	@BeforeMethod
@@ -74,14 +76,17 @@ public class BaseClass {
 		if (browser.equalsIgnoreCase("chrome")) {
 			//driver = new ChromeDriver();
 			driver.set(new ChromeDriver());
+			ExtentReportManager.registerDriver(getDriver());
 			logger.info("ChromeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("edge")) {
 			//driver = new EdgeDriver();
 			driver.set(new EdgeDriver());
+			ExtentReportManager.registerDriver(getDriver());
 			logger.info("EdgeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("firefox")) {
 			//driver = new FirefoxDriver();
 			driver.set(new FirefoxDriver());
+			ExtentReportManager.registerDriver(getDriver());
 			logger.info("FirefoxDriver Initialized");
 		} else {
 			throw new IllegalArgumentException("Browser not supported");
@@ -122,6 +127,7 @@ public class BaseClass {
         actionDriver.remove();
 		//driver = null;
        //actionDriver = null;
+        ExtentReportManager.endTest();
 
 	}
 

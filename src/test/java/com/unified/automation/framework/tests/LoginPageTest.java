@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.unified.automation.framework.core.BaseClass;
 import com.unified.automation.framework.pages.HomePage;
 import com.unified.automation.framework.pages.LoginPage;
+import com.unified.automation.framework.utilities.ExtentReportManager;
 
 public class LoginPageTest extends BaseClass {
 	private LoginPage loginPage;
@@ -19,7 +20,10 @@ public class LoginPageTest extends BaseClass {
 	}
     @Test
 	public void verifyValidLoginTest() {
+    	ExtentReportManager.startTest("Valid login test");
+    	ExtentReportManager.logStep("Navigating to login page");
 		loginPage.login("admin", "admin123");
+		ExtentReportManager.logStep("Verify admin tab is visible");
 		Assert.assertTrue(homePage.isAdminTabVisible(),"Admin tab should be visible after login");
 	    homePage.logout();
 	}

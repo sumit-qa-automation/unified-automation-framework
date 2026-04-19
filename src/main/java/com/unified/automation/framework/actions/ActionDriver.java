@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.unified.automation.framework.core.BaseClass;
+import com.unified.automation.framework.utilities.ExtentReportManager;
 
 public class ActionDriver {
 	private WebDriver driver;
@@ -49,8 +50,11 @@ public class ActionDriver {
 		try {
 			waitForElementToBeClickable(by);
 			driver.findElement(by).click();
+			ExtentReportManager.logStep("Clicked an element" + elementDescription);
 			logger.info("click on element-->" + elementDescription);
 		} catch (Exception e) {
+			ExtentReportManager.logFailure(BaseClass.getDriver(), "Unable to click on element:" + elementDescription,
+					"Unable to click" + elementDescription);
 			logger.error("Unable to click on element:" + e.getMessage());
 		}
 	}
@@ -85,9 +89,13 @@ public class ActionDriver {
 			waitForElementToBeVisible(by);
 			String actualText = driver.findElement(by).getText();
 			if (expectedText.equals(actualText)) {
+				ExtentReportManager.logStepWithScreenshot(BaseClass.getDriver(), "Compare Text",
+						"Text Verified Successfully! " + actualText + " equals " + expectedText);
 				logger.info("Text are matching:" + actualText + "equals" + expectedText);
 				return true;
 			} else {
+				ExtentReportManager.logFailure(BaseClass.getDriver(), "Text Comparison Failed!",
+						"Text Comparison Failed! " + actualText + " not equals " + expectedText);
 				logger.error("Text are not matching:" + actualText + "not equals" + expectedText);
 				return false;
 			}
@@ -103,10 +111,13 @@ public class ActionDriver {
 	public boolean isDisplayed(By by) {
 		try {
 			waitForElementToBeVisible(by);
+			ExtentReportManager.logStep("Element is displayed: " + getElementDescription(by));
+			ExtentReportManager.logStepWithScreenshot(BaseClass.getDriver(), "Element is displayed", getElementDescription(by));
 			logger.info("Element is displayed:" + getElementDescription(by));
 			return driver.findElement(by).isDisplayed();
 
 		} catch (Exception e) {
+			ExtentReportManager.logFailure(BaseClass.getDriver(),"Element is not displayed: " + getElementDescription(by),"Element is not displayed: " + getElementDescription(by));
 			logger.error("Element is not displaed:" + e.getMessage());
 			return false;
 		}
