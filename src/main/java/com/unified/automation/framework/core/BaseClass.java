@@ -37,7 +37,7 @@ public class BaseClass {
 		prop.load(file);
 		logger.info("config.properties file is loaded");
         
-		ExtentReportManager.getReporter();
+		//ExtentReportManager.getReporter();
 	}
 
 	@BeforeMethod
@@ -127,7 +127,7 @@ public class BaseClass {
         actionDriver.remove();
 		//driver = null;
        //actionDriver = null;
-        ExtentReportManager.endTest();
+       // ExtentReportManager.endTest();
 
 	}
 

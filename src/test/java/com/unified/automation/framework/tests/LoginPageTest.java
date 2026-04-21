@@ -20,10 +20,10 @@ public class LoginPageTest extends BaseClass {
 	}
     @Test
 	public void verifyValidLoginTest() {
-    	ExtentReportManager.startTest("Valid login test");
-    	ExtentReportManager.logStep("Navigating to login page");
+    	//ExtentReportManager.startTest("Valid login test");
+    	//ExtentReportManager.logStep("Navigating to login page");
 		loginPage.login("admin", "admin123");
-		ExtentReportManager.logStep("Verify admin tab is visible");
+		//ExtentReportManager.logStep("Verify admin tab is visible");
 		Assert.assertTrue(homePage.isAdminTabVisible(),"Admin tab should be visible after login");
 	    homePage.logout();
 	}

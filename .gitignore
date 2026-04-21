@@ -5,3 +5,8 @@ logs/
 .settings/
 .project
 .classpath
+/extent-report/
+/*.png
+/*.html
+src/test/resources/extentReport/ExtentReport.html
+src/test/resources/screenshots/dummyTest_2026-04-21_22-07-24.png
