@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.unified.automation.framework.core.BaseClass;
 import com.unified.automation.framework.pages.HomePage;
 import com.unified.automation.framework.pages.LoginPage;
+import com.unified.automation.framework.utilities.DataProviders;
 
 public class HomePageTest extends BaseClass {
 	private LoginPage loginPage;
@@ -18,9 +19,9 @@ public class HomePageTest extends BaseClass {
 		homePage = new HomePage(getDriver());
 	}
 
-	@Test
-	public void verifyHomePageDashboardLogo() {
-		loginPage.login("admin", "admin123");
+	@Test(dataProvider = "validLoginData", dataProviderClass = DataProviders.class)
+	public void verifyHomePageDashboardLogo(String username, String password) {
+		loginPage.login(username, password);
 		Assert.assertTrue(homePage.verifyOrangeHRMlogo(), "Logo is not visible");
 		homePage.logout();
 	}
