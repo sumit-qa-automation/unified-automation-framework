@@ -7,9 +7,10 @@
 	</listeners>
 	<test name="RegressionTests">
 		<classes>
-			<class name="com.unified.automation.framework.tests.DummyClass"></class>
-			<class name="com.unified.automation.framework.tests.LoginPageTest"></class>
-			<class name="com.unified.automation.framework.tests.HomePageTest"></class>
+			<class name="com.unified.automation.framework.web.tests.DummyClass"></class>
+			<class name="com.unified.automation.framework.web.tests.LoginPageTest"></class>
+			<class name="com.unified.automation.framework.web.tests.HomePageTest"></class>
+			<class name="com.unified.automation.framework.api.tests.ApiTest"></class>
 		</classes>
 	</test>
 </suite>

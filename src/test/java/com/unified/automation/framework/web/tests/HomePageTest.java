@@ -1,4 +1,4 @@
-package com.unified.automation.framework.tests;
+package com.unified.automation.framework.web.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;

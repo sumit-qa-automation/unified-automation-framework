@@ -1,9 +1,10 @@
-package com.unified.automation.framework.tests;
+package com.unified.automation.framework.web.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.unified.automation.framework.core.BaseClass;
 import com.unified.automation.framework.pages.HomePage;
@@ -14,6 +15,8 @@ import com.unified.automation.framework.utilities.ExtentReportManager;
 public class LoginPageTest extends BaseClass {
 	private LoginPage loginPage;
 	private HomePage homePage;
+	
+	SoftAssert softAssert=getSoftAssert();
 
 	@BeforeMethod
 	public void setupPages() {
