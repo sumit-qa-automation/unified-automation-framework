@@ -91,6 +91,11 @@
 			<artifactId>json-path</artifactId>
 			<version>5.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.9.2</version>
+		</dependency>
 
 	</dependencies>
 
@@ -122,6 +127,10 @@
 							<!-- Specify the location of your testng.xml file -->
 							<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
 						</suiteXmlFiles>
+						<systemPropertyVariables>
+							<browser>${browser}</browser>
+							<headless>${headless}</headless>
+						</systemPropertyVariables>
 					</configuration>
 				</plugin>
 				<plugin>
