@@ -1,12 +1,52 @@
-target/
+# Ignore build and dependency files
+/target/
 *.class
-test-output/
-logs/
-.settings/
-.project
-.classpath
-/extent-report/
-/*.png
-/*.html
-src/test/resources/extentReport/ExtentReport.html
-src/test/resources/screenshots/dummyTest_2026-04-21_22-07-24.png
+*.jar
+*.war
+*.ear
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore Maven-specific files
+.mvn/
+mvnw
+mvnw.cmd
+
+# Ignore log and output files
+*.log
+/logs/
+*.out
+*.err
+
+# Ignore test reports and screenshots
+/test-output/
+screenshots/
+allure-results/
+reports/
+ExtentReport/
+*.html
+
+# Ignore generated Selenium WebDriver files
+chromedriver.log
+geckodriver.log
+selenium-server.log
+
+# Ignore compiled and temporary files
+/bin/
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Ignore Node modules (if using any JS tools)
+node_modules/
+
+# Ignore dependency caching
+/.m2/

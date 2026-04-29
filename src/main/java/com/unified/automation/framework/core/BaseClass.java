@@ -10,8 +10,11 @@ import java.util.concurrent.locks.LockSupport;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -29,10 +32,11 @@ public class BaseClass {
 	private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 	private static ThreadLocal<ActionDriver> actionDriver = new ThreadLocal<>();
 	protected static ThreadLocal<SoftAssert> softAssert = new ThreadLocal<>();
-	public SoftAssert getSoftAssert()
-	{
+
+	public SoftAssert getSoftAssert() {
 		return softAssert.get();
 	}
+
 	public static final Logger logger = LoggerManager.getLogger(BaseClass.class);
 
 	@BeforeSuite
@@ -42,8 +46,8 @@ public class BaseClass {
 		FileInputStream file = new FileInputStream("src/main/resources/config.properties");
 		prop.load(file);
 		logger.info("config.properties file is loaded");
-        
-		//ExtentReportManager.getReporter();
+
+		// ExtentReportManager.getReporter();
 	}
 
 	@BeforeMethod
@@ -66,12 +70,10 @@ public class BaseClass {
 		 * logger.info("ActionDriver initlialized for thread: " +
 		 * Thread.currentThread().getId()); }
 		 */
-		
+
 		// Initialize the ActionDriver for the current thread
 		actionDriver.set(new ActionDriver(getDriver()));
-		logger.info("ActionDriver initialized for thread:"+Thread.currentThread());
-		
-		
+		logger.info("ActionDriver initialized for thread:" + Thread.currentThread());
 
 	}
 
@@ -80,18 +82,41 @@ public class BaseClass {
 		String browser = prop.getProperty("browser");
 
 		if (browser.equalsIgnoreCase("chrome")) {
-			//driver = new ChromeDriver();
-			driver.set(new ChromeDriver());
+
+			// Create chromeoptions
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--headless");
+			options.addArguments("--disable-gpu");
+			options.addArguments("--disable-notifications");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
+
+			// driver = new ChromeDriver();
+			driver.set(new ChromeDriver(options));
 			ExtentReportManager.registerDriver(getDriver());
 			logger.info("ChromeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("edge")) {
-			//driver = new EdgeDriver();
-			driver.set(new EdgeDriver());
+			// Create edgeoptions
+			EdgeOptions options = new EdgeOptions();
+			options.addArguments("--headless");
+			options.addArguments("--disable-gpu");
+			options.addArguments("--disable-notifications");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
+			// driver = new EdgeDriver();
+			driver.set(new EdgeDriver(options));
 			ExtentReportManager.registerDriver(getDriver());
 			logger.info("EdgeDriver Initialized");
 		} else if (browser.equalsIgnoreCase("firefox")) {
-			//driver = new FirefoxDriver();
-			driver.set(new FirefoxDriver());
+			// Create FireFoxoptions
+			FirefoxOptions options = new FirefoxOptions();
+			options.addArguments("--headless");
+			options.addArguments("--disable-gpu");
+			options.addArguments("--disable-notifications");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
+			// driver = new FirefoxDriver();
+			driver.set(new FirefoxDriver(options));
 			ExtentReportManager.registerDriver(getDriver());
 			logger.info("FirefoxDriver Initialized");
 		} else {
@@ -129,11 +154,11 @@ public class BaseClass {
 			}
 		}
 		logger.info("WebDriver Instance is closed.");
-        driver.remove();
-        actionDriver.remove();
-		//driver = null;
-       //actionDriver = null;
-       // ExtentReportManager.endTest();
+		driver.remove();
+		actionDriver.remove();
+		// driver = null;
+		// actionDriver = null;
+		// ExtentReportManager.endTest();
 
 	}
 

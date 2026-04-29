@@ -15,28 +15,30 @@ import com.unified.automation.framework.utilities.ExtentReportManager;
 public class LoginPageTest extends BaseClass {
 	private LoginPage loginPage;
 	private HomePage homePage;
-	
-	SoftAssert softAssert=getSoftAssert();
+
+	SoftAssert softAssert = getSoftAssert();
 
 	@BeforeMethod
 	public void setupPages() {
 		loginPage = new LoginPage(getDriver());
 		homePage = new HomePage(getDriver());
 	}
-    @Test(dataProvider = "validLoginData", dataProviderClass = DataProviders.class)
+
+	@Test(dataProvider = "validLoginData", dataProviderClass = DataProviders.class)
 	public void verifyValidLoginTest(String username, String password) {
-    	//ExtentReportManager.startTest("Valid login test");
-    	//ExtentReportManager.logStep("Navigating to login page");
+		// ExtentReportManager.startTest("Valid login test");
+		// ExtentReportManager.logStep("Navigating to login page");
 		loginPage.login(username, password);
-		//ExtentReportManager.logStep("Verify admin tab is visible");
-		Assert.assertTrue(homePage.isAdminTabVisible(),"Admin tab should be visible after login");
-	    homePage.logout();
+		// ExtentReportManager.logStep("Verify admin tab is visible");
+		Assert.assertTrue(homePage.isAdminTabVisible(), "Admin tab should be visible after login");
+		homePage.logout();
 	}
-    @Test(dataProvider = "inValidLoginData", dataProviderClass = DataProviders.class)
+
+	@Test(dataProvider = "inValidLoginData", dataProviderClass = DataProviders.class)
 	public void verifyInValidLoginTest(String username, String password) {
 		loginPage.login(username, password);
-		String expectedErrorMessage="Invalid credentials";
-		Assert.assertTrue(loginPage.verifyErrorMessage(expectedErrorMessage),"Test Failed:Invalid error message");
+		String expectedErrorMessage = "Invalid credentials";
+		Assert.assertTrue(loginPage.verifyErrorMessage(expectedErrorMessage), "Test Failed:Invalid error message");
 	}
 
 }
