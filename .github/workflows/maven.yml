@@ -1,0 +1,61 @@
+name: Unified Automation Framework CI
+
+on:
+  push:
+    branches: [ main ]
+
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+  schedule:
+    - cron: '30 18 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-m2
+
+    - name: Verify Maven Installation
+      run: mvn -version
+
+    - name: Clean Project
+      run: mvn clean
+
+    - name: Compile Framework
+      run: mvn compile
+
+    - name: Run Automation Suite
+      run: mvn test -Dbrowser=chrome -Dheadless=true
+
+    - name: Upload Surefire Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: Surefire-Reports
+        path: target/surefire-reports/
+
+    - name: Upload TestNG Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestNG-Reports
+        path: test-output/
