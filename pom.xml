@@ -13,8 +13,19 @@
 	<url>http://www.example.com</url>
 
 	<properties>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<maven.compiler.release>17</maven.compiler.release>
+
+		<suiteXmlFile>
+			src/test/resources/testng-smoke.xml
+		</suiteXmlFile>
+
+		<browser>chrome</browser>
+
+		<headless>true</headless>
+
 	</properties>
 
 
@@ -125,7 +136,7 @@
 					<configuration>
 						<suiteXmlFiles>
 							<!-- Specify the location of your testng.xml file -->
-							<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+							<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
 						</suiteXmlFiles>
 						<systemPropertyVariables>
 							<browser>${browser}</browser>
