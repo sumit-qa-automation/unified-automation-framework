@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '30 18 * * *'
+    - cron: '*/10 * * * *'
 
 jobs:
 
@@ -134,6 +134,34 @@ jobs:
       with:
         name: Regression-TestNG-Reports
         path: test-output/
+
+    - name: Zip Regression Reports
+      run: zip -r regression-report.zip test-output/
+
+    - name: Send Email Notification
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: Nightly Regression Execution Report
+        body: |
+          Hello,
+
+          Nightly regression execution has completed successfully.
+
+          Please find the attached automation execution report.
+
+          Repository:
+          https://github.com/sumit-qa-automation/unified-automation-framework
+
+          Regards,
+          GitHub Actions CI/CD
+        to: sumight25@gmail.com
+        from: GitHub Actions
+        secure: true
+        attachments: regression-report.zip
 
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v5
