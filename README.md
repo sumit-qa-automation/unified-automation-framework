@@ -6,30 +6,33 @@
 ![TestNG](https://img.shields.io/badge/TestNG-7.10.2-red)
 ![Maven](https://img.shields.io/badge/Maven-Build-blue)
 ![GitHub Actions](https://img.shields.io/badge/CI/CD-GitHub_Actions-black)
-![API Testing](https://img.shields.io/badge/API-REST_Assured-brightgreen)
+![REST Assured](https://img.shields.io/badge/API-REST_Assured-brightgreen)
+![Appium](https://img.shields.io/badge/Appium-Mobile_Automation-purple)
+![Sauce Labs](https://img.shields.io/badge/SauceLabs-Cloud_Execution-red)
 
-Enterprise-grade Unified Automation Framework built using Selenium WebDriver, TestNG, REST Assured, Java, and Maven with integrated CI/CD pipeline using GitHub Actions.
+Enterprise-grade Unified Automation Framework built using Selenium WebDriver, TestNG, REST Assured, Appium, Java, and Maven with integrated CI/CD pipeline using GitHub Actions.
 
 ---
 
 # Framework Overview
 
-This framework is designed to support scalable and maintainable automation testing for both Web and API applications using industry-standard tools and best practices.
+This framework is designed to support scalable and maintainable automation testing for Web, API, and Mobile applications using industry-standard tools and enterprise automation practices.
 
-The framework supports:
+## Supported Automation Types
 
 - Web Automation using Selenium WebDriver
 - API Automation using REST Assured
-- TestNG Framework Integration
-- Maven Build Management
-- GitHub Actions CI/CD Integration
+- Mobile Automation using Appium
+- Sauce Labs Cloud Device Execution
+- Android Mobile Automation Framework
 - Parallel Execution Support
 - Headless Browser Execution
 - Smoke & Regression Suite Execution
-- Data-Driven Testing using Excel
 - Extent Reporting with Screenshots
-- Nightly Scheduled Regression Execution
-- Cloud-Based Test Execution
+- Data-Driven Testing using Excel
+- CI/CD Integration using GitHub Actions
+- Nightly Regression Execution
+- Manual Mobile Workflow Execution
 
 ---
 
@@ -37,16 +40,19 @@ The framework supports:
 
 - Selenium WebDriver UI Automation
 - REST Assured API Automation
+- Appium Mobile Automation
+- Sauce Labs Cloud Integration
+- Unified Web + API + Mobile Automation
 - Page Object Model (POM) Design Pattern
 - Parallel Test Execution
 - Data-Driven Testing using Excel
 - Extent Reports with Screenshots
-- Maven Build Lifecycle Integration
+- Mobile Extent Reporting Support
 - GitHub Actions CI/CD Integration
 - Smoke and Regression Suite Separation
-- Nightly Scheduled Regression Execution
 - Headless Chrome Execution
 - Logging using Log4j2
+- Maven Build Lifecycle Integration
 - Modular and Scalable Framework Design
 - Recruiter-Friendly Framework Architecture
 
@@ -60,6 +66,8 @@ The framework supports:
 | Selenium WebDriver | UI Automation |
 | TestNG | Test Execution Framework |
 | REST Assured | API Automation |
+| Appium | Mobile Automation |
+| Sauce Labs | Cloud Mobile Execution |
 | Maven | Build Management |
 | GitHub Actions | CI/CD |
 | Extent Reports | Reporting |
@@ -69,46 +77,7 @@ The framework supports:
 
 ---
 
-# Project Structure
-
-```text
-unified-automation-framework
-│
-├── .github/workflows
-│   └── maven.yml
-│
-├── src/main/java
-│   ├── actions
-│   ├── core
-│   ├── listeners
-│   ├── pages
-│   └── utilities
-│
-├── src/main/resources
-│   ├── config.properties
-│   └── log4j2.xml
-│
-├── src/test/java
-│   ├── api/tests
-│   └── web/tests
-│
-├── src/test/resources
-│   ├── testdata
-│   ├── testng-smoke.xml
-│   └── testng-regression.xml
-│
-├── test-output
-│
-├── pom.xml
-│
-└── README.md
-```
-
----
-
 # Framework Architecture
-
-The framework follows a layered architecture:
 
 ```text
 Test Layer
@@ -124,6 +93,52 @@ Utilities & Reporting Layer
 
 ---
 
+# Project Structure
+
+```text
+unified-automation-framework
+│
+├── .github/workflows
+│   └── maven.yml
+│
+├── src/main/java
+│   ├── actions
+│   │   ├── ActionDriver.java
+│   │   └── MobileActionDriver.java
+│   │
+│   ├── core
+│   │   ├── BaseClass.java
+│   │   └── MobileBaseClass.java
+│   │
+│   ├── listeners
+│   │   └── TestListener.java
+│   │
+│   ├── utilities
+│   │   ├── ExtentReportManager.java
+│   │   └── ExcelUtility.java
+│
+├── src/test/java
+│   ├── api/tests
+│   ├── web/tests
+│   └── mobile/tests
+│
+├── src/test/java/mobile/pages
+│   └── LoginPageMobile.java
+│
+├── src/test/resources
+│   ├── testng-smoke.xml
+│   ├── testng-regression.xml
+│   └── testng-mobile.xml
+│
+├── test-output
+│
+├── pom.xml
+│
+└── README.md
+```
+
+---
+
 # Test Suite Strategy
 
 ## Smoke Suite
@@ -131,8 +146,9 @@ Utilities & Reporting Layer
 Smoke suite executes critical validation scenarios.
 
 Includes:
-- Dummy Test
 - Login Validation Tests
+- Core UI Validation
+- Critical Workflow Verification
 
 Triggered on:
 - Push Events
@@ -154,6 +170,37 @@ Includes:
 
 Triggered on:
 - Nightly Scheduled Execution
+
+---
+
+## Mobile Automation Suite
+
+Mobile suite executes Android automation scenarios using Appium and Sauce Labs cloud devices.
+
+Includes:
+- Android Login Validation
+- Mobile UI Validation
+- Cloud Device Execution
+
+Triggered on:
+- Manual GitHub Actions Workflow Execution
+
+---
+
+# Mobile Automation Framework
+
+The framework supports Android mobile automation using Appium and Sauce Labs cloud devices.
+
+## Mobile Automation Features
+
+- Android App Automation
+- Appium Integration
+- Sauce Labs Cloud Execution
+- Mobile Page Object Model
+- Mobile Action Driver
+- Mobile Extent Reporting
+- Unified Listener Support
+- Screenshot Capture Support
 
 ---
 
@@ -187,6 +234,9 @@ Artifact Upload
 - Maven Dependency Caching
 - Smoke Suite Execution on Push
 - Regression Suite Execution on Schedule
+- Manual Mobile Automation Workflow
+- Secure GitHub Secrets Integration
+- Sauce Labs Cloud Mobile Execution
 - TestNG Report Archival
 - Extent Report Artifact Upload
 
@@ -235,6 +285,7 @@ The framework generates:
 - Extent Reports
 - TestNG Reports
 - Maven Surefire Reports
+- Mobile Execution Reports
 - Screenshot Captures on Failures
 
 Reports are automatically archived in GitHub Actions artifacts after execution.
@@ -259,6 +310,14 @@ mvn test -DsuiteXmlFile=src/test/resources/testng-regression.xml
 
 ---
 
+## Run Mobile Suite
+
+```bash
+mvn clean test -DsuiteXmlFile=src/test/resources/testng-mobile.xml
+```
+
+---
+
 ## Run in Headless Mode
 
 ```bash
@@ -267,10 +326,24 @@ mvn clean test -Dbrowser=chrome -Dheadless=true
 
 ---
 
+# Cloud Mobile Execution
+
+The framework integrates with Sauce Labs for scalable cloud-based mobile execution.
+
+Features:
+- Android Cloud Device Execution
+- Secure GitHub Secrets Integration
+- Manual CI/CD Trigger Support
+- Video Recording Support
+- Cloud Execution Logs
+- Cross-Device Scalability
+
+---
+
 # Framework Highlights
 
 - Enterprise Automation Architecture
-- Unified Web + API Automation
+- Unified Web + API + Mobile Automation
 - CI/CD Integrated Framework
 - Cloud Execution Ready
 - Parallel Execution Support
@@ -284,8 +357,8 @@ mvn clean test -Dbrowser=chrome -Dheadless=true
 - Cross Browser Matrix Execution
 - Docker Selenium Grid
 - Allure Reporting
-- BrowserStack / LambdaTest Integration
-- Mobile Automation Integration
+- BrowserStack Integration
+- iOS Mobile Automation
 - AI-Based Test Generation
 - Self-Healing Automation
 - Advanced Reporting Dashboards
@@ -306,6 +379,12 @@ _Add Extent Report screenshot here_
 
 ---
 
+## Sauce Labs Mobile Execution
+
+_Add Sauce Labs execution screenshot here_
+
+---
+
 # Author
 
 ## Sumit Gohatre
@@ -313,6 +392,7 @@ _Add Extent Report screenshot here_
 QA Automation Engineer | SDET
 
 ### GitHub Profile
+
 https://github.com/sumit-qa-automation
 
 ---
