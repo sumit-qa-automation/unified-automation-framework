@@ -369,19 +369,19 @@ Features:
 
 ## GitHub Actions CI/CD
 
-_Add workflow execution screenshot here_
+![GitHub Actions](screenshots/github-actions.png)
 
 ---
 
 ## Extent Reports
 
-_Add Extent Report screenshot here_
+![Extent Reports](screenshots/extent-report.png)
 
 ---
 
 ## Sauce Labs Mobile Execution
 
-_Add Sauce Labs execution screenshot here_
+![Sauce Labs](screenshots/sauce-labs.png)
 
 ---
 
