@@ -173,6 +173,7 @@ jobs:
 
           Regards,
           GitHub Actions CI/CD
+
         to: sumight25@gmail.com
         from: GitHub Actions
         secure: true
@@ -200,6 +201,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
+
+    env:
+      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
     steps:
 

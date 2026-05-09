@@ -64,11 +64,11 @@ public class MobileBaseClass {
 				Map.of("appiumVersion", "latest", "build", "Mobile Automation Build", "name", "Android Login Test"));
 
 		// Sauce Labs Credentials
+		String username = System.getenv("SAUCE_USERNAME") != null ? System.getenv("SAUCE_USERNAME")
+				: prop.getProperty("sauce.username");
 
-		String username = prop.getProperty("sauce.username");
-
-		String accessKey = prop.getProperty("sauce.accesskey");
-
+		String accessKey = System.getenv("SAUCE_ACCESS_KEY") != null ? System.getenv("SAUCE_ACCESS_KEY")
+				: prop.getProperty("sauce.accesskey");
 		String sauceURL = "https://" + username + ":" + accessKey + "@ondemand.eu-central-1.saucelabs.com:443/wd/hub";
 
 		try {
