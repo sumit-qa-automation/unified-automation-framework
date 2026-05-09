@@ -34,6 +34,29 @@ This framework is designed to support scalable and maintainable automation testi
 - Nightly Regression Execution
 - Manual Mobile Workflow Execution
 
+# AI-Assisted Engineering
+
+This framework includes AI agent instruction files and reusable skill guides for Claude Code and AI-assisted automation development.
+
+## AI Engineering Features
+
+- Claude Code Repository Instructions
+- AI Agent Workflow Guidelines
+- Automation Framework Skill Files
+- Reusable AI Engineering Standards
+- Framework Architecture Rules
+- AI-Assisted Development Support
+- CI/CD-Aware AI Instructions
+- Modular Automation Engineering Practices
+
+## AI Instruction Files
+
+```text
+AGENTS.md
+CLAUDE.md
+ai-skills/
+```
+
 ---
 
 # Key Features
