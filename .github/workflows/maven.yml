@@ -5,6 +5,10 @@ permissions:
   pages: write
   id-token: write
 
+# =========================================
+# Workflow Triggers
+# =========================================
+
 on:
   push:
     branches: [ main ]
@@ -14,10 +18,16 @@ on:
 
   workflow_dispatch:
 
+  # Nightly Regression Execution
   schedule:
     - cron: '30 18 * * *'
 
 jobs:
+
+  # =========================================
+  # Smoke Suite Execution
+  # Runs on Push and Pull Requests
+  # =========================================
 
   build:
 
@@ -82,6 +92,11 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+  # =========================================
+  # Nightly Regression Execution
+  # Scheduled Daily at 12:00 AM IST
+  # =========================================
 
   nightly-regression:
 
@@ -174,3 +189,51 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+  # =========================================
+  # Manual Mobile Automation Execution
+  # Triggered using workflow_dispatch
+  # =========================================
+
+  mobile-automation:
+
+    if: github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-m2
+
+    - name: Verify Maven Installation
+      run: mvn -version
+
+    - name: Clean Project
+      run: mvn clean
+
+    - name: Compile Framework
+      run: mvn compile
+
+    - name: Run Mobile Automation Suite
+      run: mvn clean test -DsuiteXmlFile=src/test/resources/testng-mobile.xml
+
+    - name: Upload Mobile Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: Mobile-Test-Reports
+        path: test-output/
