@@ -10,6 +10,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 
 import com.unified.automation.framework.core.BaseClass;
+import com.unified.automation.framework.core.MobileBaseClass;
 import com.unified.automation.framework.utilities.ExtentReportManager;
 //import com.unified.automation.framework.utilities.RetryAnalyzer;
 
@@ -24,63 +25,106 @@ public class TestListener implements ITestListener, IAnnotationTransformer {
 	// Triggered when a test starts
 	@Override
 	public void onTestStart(ITestResult result) {
+
 		String testName = result.getMethod().getMethodName();
-		// Start logging in Extent Reports
+
 		ExtentReportManager.startTest(testName);
+
 		ExtentReportManager.logStep("Test Started: " + testName);
 	}
 
 	// Triggered when a Test succeeds
 	@Override
 	public void onTestSuccess(ITestResult result) {
+
 		String testName = result.getMethod().getMethodName();
 
-		if (!result.getTestClass().getName().toLowerCase().contains("api")) {
-			ExtentReportManager.logStepWithScreenshot(BaseClass.getDriver(), "Test Passed Successfully!",
-					"Test End: " + testName + " - ✔ Test Passed");
-		} else {
-			ExtentReportManager.logStepValidationForAPI("Test End: " + testName + " - ✔ Test Passed");
+		String className = result.getTestClass().getName().toLowerCase();
+
+		// ================= MOBILE =================
+
+		if (className.contains("mobile")) {
+
+			ExtentReportManager.logStepWithScreenshot(MobileBaseClass.getMobileDriver(), "Mobile Test Passed Successfully!",
+					"Test End: " + testName + " - ✔ Mobile Test Passed");
+
 		}
 
+		// ================= WEB =================
+
+		else if (!className.contains("api")) {
+
+			ExtentReportManager.logStepWithScreenshot(BaseClass.getDriver(), "Test Passed Successfully!",
+					"Test End: " + testName + " - ✔ Test Passed");
+
+		}
+
+		// ================= API =================
+
+		else {
+
+			ExtentReportManager.logStepValidationForAPI("Test End: " + testName + " - ✔ Test Passed");
+		}
 	}
 
 	// Triggered when a Test Fails
 	@Override
 	public void onTestFailure(ITestResult result) {
+
 		String testName = result.getMethod().getMethodName();
+
 		String failureMessage = result.getThrowable().getMessage();
+
+		String className = result.getTestClass().getName().toLowerCase();
+
 		ExtentReportManager.logStep(failureMessage);
-		ExtentReportManager.logFailure(BaseClass.getDriver(), "Test Failed!",
-				"Test End: " + testName + " - ❌ Test Failed");
-		/*
-		 * if(!result.getTestClass().getName().toLowerCase().contains("api")) {
-		 * ExtentReportManager.logFailure(BaseClass.getDriver(), "Test Failed!",
-		 * "Test End: " + testName + " - ❌ Test Failed"); } else {
-		 * ExtentReportManager.logFailureAPI("Test End: " + testName +
-		 * " - ❌ Test Failed"); }
-		 */
+
+		// ================= MOBILE =================
+
+		if (className.contains("mobile")) {
+
+			ExtentReportManager.logFailure(MobileBaseClass.getMobileDriver(), "Mobile Test Failed!",
+					"Test End: " + testName + " - ❌ Mobile Test Failed");
+
+		}
+
+		// ================= WEB =================
+
+		else if (!className.contains("api")) {
+
+			ExtentReportManager.logFailure(BaseClass.getDriver(), "Test Failed!",
+					"Test End: " + testName + " - ❌ Test Failed");
+
+		}
+
+		// ================= API =================
+
+		else {
+
+			ExtentReportManager.logFailureAPI("Test End: " + testName + " - ❌ API Test Failed");
+		}
 	}
 
 	// Triggered when a Test skips
 	@Override
 	public void onTestSkipped(ITestResult result) {
+
 		String testName = result.getMethod().getMethodName();
+
 		ExtentReportManager.logSkip("Test Skipped " + testName);
 	}
 
-	// Triggered when a suite Starts
+	// Triggered when suite starts
 	@Override
 	public void onStart(ITestContext context) {
-		// Initialize the Extent Reports
+
 		ExtentReportManager.getReporter();
 	}
 
-	// Triggered when the suite ends
+	// Triggered when suite ends
 	@Override
 	public void onFinish(ITestContext context) {
-		// Flush the Extent Reports
+
 		ExtentReportManager.endTest();
-
 	}
-
 }
