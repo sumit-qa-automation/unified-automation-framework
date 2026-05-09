@@ -13,7 +13,10 @@ on:
     - cron: '30 18 * * *'
 
 jobs:
+
   build:
+
+    if: github.event_name != 'schedule'
 
     runs-on: ubuntu-latest
 
@@ -45,8 +48,8 @@ jobs:
     - name: Compile Framework
       run: mvn compile
 
-    - name: Run Automation Suite
-      run: mvn test -Dbrowser=chrome -Dheadless=true
+    - name: Run Smoke Suite
+      run: mvn test -DsuiteXmlFile=src/test/resources/testng-smoke.xml -Dbrowser=chrome -Dheadless=true
 
     - name: Upload Surefire Reports
       uses: actions/upload-artifact@v4
@@ -54,8 +57,57 @@ jobs:
         name: Surefire-Reports
         path: target/surefire-reports/
 
-    - name: Upload TestNG Reports
+    - name: Upload Smoke Reports
       uses: actions/upload-artifact@v4
       with:
-        name: TestNG-Reports
+        name: Smoke-TestNG-Reports
+        path: test-output/
+
+  nightly-regression:
+
+    if: github.event_name == 'schedule'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-m2
+
+    - name: Verify Maven Installation
+      run: mvn -version
+
+    - name: Clean Project
+      run: mvn clean
+
+    - name: Compile Framework
+      run: mvn compile
+
+    - name: Run Regression Suite
+      run: mvn test -DsuiteXmlFile=src/test/resources/testng-regression.xml -Dbrowser=chrome -Dheadless=true
+
+    - name: Upload Surefire Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: Regression-Surefire-Reports
+        path: target/surefire-reports/
+
+    - name: Upload Regression Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: Regression-TestNG-Reports
         path: test-output/
