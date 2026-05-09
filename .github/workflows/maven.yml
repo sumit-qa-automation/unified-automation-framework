@@ -1,5 +1,10 @@
 name: Unified Automation Framework CI
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 on:
   push:
     branches: [ main ]
@@ -19,6 +24,9 @@ jobs:
     if: github.event_name != 'schedule'
 
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
 
     steps:
 
@@ -63,11 +71,26 @@ jobs:
         name: Smoke-TestNG-Reports
         path: test-output/
 
+    - name: Setup GitHub Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: test-output/
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
   nightly-regression:
 
     if: github.event_name == 'schedule'
 
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
 
     steps:
 
@@ -111,3 +134,15 @@ jobs:
       with:
         name: Regression-TestNG-Reports
         path: test-output/
+
+    - name: Setup GitHub Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: test-output/
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
