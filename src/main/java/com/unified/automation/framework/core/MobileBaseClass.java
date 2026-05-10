@@ -58,20 +58,24 @@ public class MobileBaseClass {
 
 		options.setAutomationName("UiAutomator2");
 
-		// Sauce Labs Options
-
-		options.setCapability("sauce:options",
-				Map.of("appiumVersion", "latest", "build", "Mobile Automation Build", "name", "Android Login Test"));
-
 		// Sauce Labs Credentials
+
 		String username = System.getenv("SAUCE_USERNAME") != null ? System.getenv("SAUCE_USERNAME")
 				: prop.getProperty("sauce.username");
 
 		String accessKey = System.getenv("SAUCE_ACCESS_KEY") != null ? System.getenv("SAUCE_ACCESS_KEY")
 				: prop.getProperty("sauce.accesskey");
-		String sauceURL = "https://" + username + ":" + accessKey + "@ondemand.eu-central-1.saucelabs.com:443/wd/hub";
+
+		// Sauce Labs Options
+
+		options.setCapability("sauce:options", Map.of("username", username, "accessKey", accessKey, "appiumVersion",
+				"latest", "build", "Mobile Automation Build", "name", "Android Login Test"));
+
+		String sauceURL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub";
 
 		try {
+
+			logger.info("Connecting to Sauce Labs mobile cloud execution");
 
 			driver = new AndroidDriver(new URL(sauceURL), options);
 
