@@ -12,6 +12,10 @@ on:
   pull_request:
     branches: [ main ]
 
+  # Nightly regression execution schedule
+  schedule:
+    - cron: '30 18 * * *'
+
   # Manual workflow trigger with suite selection
   workflow_dispatch:
     inputs:
@@ -29,7 +33,7 @@ jobs:
 
   smoke-suite:
 
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.suite == 'smoke'
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event.inputs.suite == 'smoke'
 
     runs-on: ubuntu-latest
 
@@ -96,7 +100,7 @@ jobs:
 
   regression-suite:
 
-    if: github.event.inputs.suite == 'regression'
+    if: github.event_name == 'schedule' || github.event.inputs.suite == 'regression'
 
     runs-on: ubuntu-latest
 
