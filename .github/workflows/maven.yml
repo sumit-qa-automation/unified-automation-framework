@@ -12,14 +12,24 @@ on:
   pull_request:
     branches: [ main ]
 
-  # Manual workflow trigger from GitHub Actions UI
+  # Manual workflow trigger with suite selection
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Select automation suite to execute"
+        required: true
+        default: "smoke"
+        type: choice
+        options:
+          - smoke
+          - regression
+          - mobile
 
 jobs:
 
-  build:
+  smoke-suite:
 
-    if: github.event_name != 'workflow_dispatch'
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.suite == 'smoke'
 
     runs-on: ubuntu-latest
 
@@ -81,9 +91,9 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
 
-  nightly-regression:
+  regression-suite:
 
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event.inputs.suite == 'regression'
 
     runs-on: ubuntu-latest
 
@@ -140,11 +150,11 @@ jobs:
         server_port: 465
         username: ${{ secrets.EMAIL_USERNAME }}
         password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: Nightly Regression Execution Report
+        subject: Regression Suite Execution Report
         body: |
           Hello,
 
-          Nightly regression execution has completed successfully.
+          Regression suite execution has completed successfully.
 
           Execution Report:
           https://sumit-qa-automation.github.io/unified-automation-framework/
@@ -172,9 +182,12 @@ jobs:
 
   mobile-automation:
 
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event.inputs.suite == 'mobile'
 
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
 
     steps:
 
@@ -212,3 +225,15 @@ jobs:
       with:
         name: Mobile-TestNG-Reports
         path: test-output/
+
+    - name: Setup GitHub Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: test-output/
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
