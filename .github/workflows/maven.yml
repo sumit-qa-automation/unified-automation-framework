@@ -174,7 +174,7 @@ jobs:
           Regards,
           GitHub Actions CI/CD
 
-        to: sumight25@gmail.com
+        to: sumitght25@gmail.com
         from: GitHub Actions
         secure: true
         attachments: regression-report.zip
