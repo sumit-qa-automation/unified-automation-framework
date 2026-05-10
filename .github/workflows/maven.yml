@@ -79,6 +79,9 @@ jobs:
         name: Smoke-TestNG-Reports
         path: test-output/
 
+    - name: Prepare GitHub Pages Report
+      run: cp test-output/ExtentReport.html test-output/index.html
+
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v5
 
@@ -143,6 +146,9 @@ jobs:
         name: Regression-TestNG-Reports
         path: test-output/
 
+    - name: Prepare Extent Report Attachment
+      run: cp test-output/ExtentReport.html ExtentReport.html
+
     - name: Send Email Notification
       uses: dawidd6/action-send-mail@v3
       with:
@@ -156,17 +162,25 @@ jobs:
 
           Regression suite execution has completed successfully.
 
-          Execution Report:
+          GitHub Pages Report:
           https://sumit-qa-automation.github.io/unified-automation-framework/
 
           Repository:
           https://github.com/sumit-qa-automation/unified-automation-framework
 
+          Attached:
+          ExtentReport.html
+
           Regards,
           GitHub Actions CI/CD
+
         to: sumitght25@gmail.com
         from: GitHub Actions
         secure: true
+        attachments: ExtentReport.html
+
+    - name: Prepare GitHub Pages Report
+      run: cp test-output/ExtentReport.html test-output/index.html
 
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v5
@@ -225,6 +239,9 @@ jobs:
       with:
         name: Mobile-TestNG-Reports
         path: test-output/
+
+    - name: Prepare GitHub Pages Report
+      run: cp test-output/ExtentReport.html test-output/index.html
 
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v5
