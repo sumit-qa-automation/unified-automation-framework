@@ -207,6 +207,10 @@ jobs:
     environment:
       name: github-pages
 
+    env:
+      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
     steps:
 
     - name: Checkout Repository
