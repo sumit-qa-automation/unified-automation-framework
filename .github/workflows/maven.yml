@@ -5,10 +5,6 @@ permissions:
   pages: write
   id-token: write
 
-# =========================================
-# Workflow Triggers
-# =========================================
-
 on:
   push:
     branches: [ main ]
@@ -16,22 +12,14 @@ on:
   pull_request:
     branches: [ main ]
 
+  # Manual workflow trigger from GitHub Actions UI
   workflow_dispatch:
-
-  # Nightly Regression Execution
-  schedule:
-    - cron: '30 18 * * *'
 
 jobs:
 
-  # =========================================
-  # Smoke Suite Execution
-  # Runs on Push and Pull Requests
-  # =========================================
-
   build:
 
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'workflow_dispatch'
 
     runs-on: ubuntu-latest
 
@@ -93,14 +81,9 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
 
-  # =========================================
-  # Nightly Regression Execution
-  # Scheduled Daily at 12:00 AM IST
-  # =========================================
-
   nightly-regression:
 
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
 
@@ -150,9 +133,6 @@ jobs:
         name: Regression-TestNG-Reports
         path: test-output/
 
-    - name: Zip Regression Reports
-      run: zip -r regression-report.zip test-output/
-
     - name: Send Email Notification
       uses: dawidd6/action-send-mail@v3
       with:
@@ -166,18 +146,17 @@ jobs:
 
           Nightly regression execution has completed successfully.
 
-          Please find the attached automation execution report.
+          Execution Report:
+          https://sumit-qa-automation.github.io/unified-automation-framework/
 
           Repository:
           https://github.com/sumit-qa-automation/unified-automation-framework
 
           Regards,
           GitHub Actions CI/CD
-
-        to: sumitght25@gmail.com
+        to: sumight25@gmail.com
         from: GitHub Actions
         secure: true
-        attachments: regression-report.zip
 
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v5
@@ -191,20 +170,11 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
 
-  # =========================================
-  # Manual Mobile Automation Execution
-  # Triggered using workflow_dispatch
-  # =========================================
-
   mobile-automation:
 
     if: github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
-
-    env:
-      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
     steps:
 
@@ -235,10 +205,10 @@ jobs:
       run: mvn compile
 
     - name: Run Mobile Automation Suite
-      run: mvn clean test -DsuiteXmlFile=src/test/resources/testng-mobile.xml
+      run: mvn test -DsuiteXmlFile=src/test/resources/testng-mobile.xml
 
     - name: Upload Mobile Reports
       uses: actions/upload-artifact@v4
       with:
-        name: Mobile-Test-Reports
+        name: Mobile-TestNG-Reports
         path: test-output/
